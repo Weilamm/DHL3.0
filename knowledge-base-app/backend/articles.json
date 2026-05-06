@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ca975d0c-8813-4dc4-bebe-10e3b546f8cc",
+    "title": "This is a sample document...",
+    "rawText": "This is a sample document about server maintenance. First, turn off the server. Second, unplug the cables. Third, clean the dust.",
+    "textHash": "267222df5087f9b4c31826e5fc187f59f769273a6ef212379f68003e4c9508c0",
+    "summary": "Generated summary for text with 21 words. The content revolves around standard knowledge base topics.",
+    "steps": [
+      "Review the initial concept.",
+      "Identify key action items.",
+      "Implement necessary changes.",
+      "Verify results."
+    ],
+    "tags": [
+      "Troubleshooting",
+      "Guide"
+    ],
+    "status": "published",
+    "creator": "admin",
+    "createdAt": "2026-05-06T06:18:39.690Z",
+    "version": 3,
+    "history": [
+      {
+        "version": 1,
+        "updatedAt": "2026-05-06T06:18:39.690Z",
+        "changes": "Initial creation"
+      },
+      {
+        "version": 2,
+        "updatedAt": "2026-05-06T06:18:47.120Z",
+        "changes": "Article details updated"
+      },
+      {
+        "version": 2,
+        "updatedAt": "2026-05-06T06:18:47.133Z",
+        "changes": "Status changed to reviewed"
+      },
+      {
+        "version": 3,
+        "updatedAt": "2026-05-06T06:18:53.525Z",
+        "changes": "Article details updated"
+      },
+      {
+        "version": 3,
+        "updatedAt": "2026-05-06T06:18:53.545Z",
+        "changes": "Status changed to published"
+      }
+    ]
+  }
+]
