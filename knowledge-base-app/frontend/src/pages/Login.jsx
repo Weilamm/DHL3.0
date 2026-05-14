@@ -37,7 +37,7 @@ const Login = () => {
             <div className="w-3 h-3 bg-secondary-400 rounded-full z-10 shadow-[0_0_15px_#06b6d4]"></div>
           </div>
           <h2 className="mt-2 text-center text-4xl font-extrabold tracking-tight text-white">
-            KBA <span className="neon-text">Nexus</span>
+            DHL <span className="neon-text">Logistics</span>
           </h2>
           <p className="mt-3 text-center text-sm text-gray-400">
             Secure access to the knowledge core

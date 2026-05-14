@@ -38,7 +38,7 @@ const Layout = () => {
                   <Hexagon size={32} className="text-primary-500 absolute animate-glow-pulse" />
                   <div className="w-2 h-2 bg-secondary-500 rounded-full z-10 animate-ping"></div>
                 </div>
-                <span className="text-xl font-bold tracking-tight neon-text">KBA Nexus</span>
+                <span className="text-xl font-bold tracking-tight neon-text">DHL Knowledge Base</span>
               </div>
               <div className="hidden sm:ml-10 sm:flex sm:space-x-2">
                 {navItems.map((item) => {
