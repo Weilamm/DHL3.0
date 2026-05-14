@@ -12,3 +12,14 @@ export const createArticle = (rawText, creator) => api.post('/articles', { rawTe
 export const updateArticle = (id, data) => api.put(`/articles/${id}`, data);
 export const updateArticleStatus = (id, status) => api.patch(`/articles/${id}/status`, { status });
 export const deleteArticle = (id) => api.delete(`/articles/${id}`);
+
+export const uploadFile = (file, rawText, creator) => {
+  const formData = new FormData();
+  if (file) formData.append('file', file);
+  if (rawText) formData.append('rawText', rawText);
+  if (creator) formData.append('creator', creator);
+  return api.post('/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+};
+

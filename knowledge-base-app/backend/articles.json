@@ -1,49 +1,152 @@
 [
   {
-    "id": "ca975d0c-8813-4dc4-bebe-10e3b546f8cc",
-    "title": "This is a sample document...",
-    "rawText": "This is a sample document about server maintenance. First, turn off the server. Second, unplug the cables. Third, clean the dust.",
-    "textHash": "267222df5087f9b4c31826e5fc187f59f769273a6ef212379f68003e4c9508c0",
-    "summary": "Generated summary for text with 21 words. The content revolves around standard knowledge base topics.",
-    "steps": [
-      "Review the initial concept.",
-      "Identify key action items.",
-      "Implement necessary changes.",
-      "Verify results."
-    ],
-    "tags": [
-      "Troubleshooting",
-      "Guide"
-    ],
-    "status": "published",
-    "creator": "admin",
-    "createdAt": "2026-05-06T06:18:39.690Z",
-    "version": 3,
+    "id": "83402806-f7f3-43b8-a1bf-5e010041e2a1",
+    "title": "Customer address invalid.\r\nTeam chat says...",
+    "rawText": "Customer address invalid.\r\nTeam chat says postcode missing.\r\nFix:\r\nAdd postcode manually,\r\nRevalidate address,\r\nSave and continue booking.",
+    "textHash": "63d932a6739c844e770dcf09ff99c3b751f6a3915b5c3392c45d852b3a4c5a82",
+    "summary": "Customer address invalid.\r\nTeam chat says postcode missing.\r\nFix:\r\nAdd postcode manually,\r\nRevalidate address,\r\nSave and continue booking.",
+    "status": "draft",
+    "creator": "System",
+    "rpaMetadata": {
+      "title": "Auto Generated",
+      "status": "Draft"
+    },
+    "createdAt": "2026-05-14T13:54:37.544Z",
+    "version": 1,
     "history": [
       {
         "version": 1,
-        "updatedAt": "2026-05-06T06:18:39.690Z",
-        "changes": "Initial creation"
-      },
+        "updatedAt": "2026-05-14T13:54:37.544Z",
+        "changes": "Initial creation via RPA"
+      }
+    ]
+  },
+  {
+    "id": "78bc6db4-77ea-4f30-b000-c1d8749a59aa",
+    "title": "Error Code: AUTH_401\r\nUser not authorized...",
+    "rawText": "Error Code: AUTH_401\r\nUser not authorized to access module.\r\nResolution:\r\n- Check AD group access\r\n- User must be in OPS_FWD_ROLE\r\n- Logout and login again",
+    "textHash": "1ce6c99c68668edf530afc2ce9100e1b4ccfc8af215b18118b3840ec9bc6072f",
+    "summary": "Error Code: AUTH_401\r\nUser not authorized to access module.\r\nResolution:\r\n- Check AD group access\r\n- User must be in OPS_FWD_ROLE\r\n- Logout and login again",
+    "status": "draft",
+    "creator": "System",
+    "rpaMetadata": {
+      "title": "Auto Generated",
+      "status": "Draft"
+    },
+    "createdAt": "2026-05-14T13:54:37.642Z",
+    "version": 1,
+    "history": [
       {
-        "version": 2,
-        "updatedAt": "2026-05-06T06:18:47.120Z",
-        "changes": "Article details updated"
-      },
+        "version": 1,
+        "updatedAt": "2026-05-14T13:54:37.642Z",
+        "changes": "Initial creation via RPA"
+      }
+    ]
+  },
+  {
+    "id": "9b4bfa59-e95d-4170-a266-607eabceb5fb",
+    "title": "Label not printing properly.\r\nUsually printer...",
+    "rawText": "Label not printing properly.\r\nUsually printer cache issue.\r\nRestart printer service,\r\nClear queue,\r\nReprint label.\r\nIf still blur, change toner.",
+    "textHash": "1ebdfdc24db7299d889a848dc834c11a67e6f1ecf3709bacadfe07f397d8aae2",
+    "summary": "Label not printing properly.\r\nUsually printer cache issue.\r\nRestart printer service,\r\nClear queue,\r\nReprint label.\r\nIf still blur, change toner.",
+    "status": "draft",
+    "creator": "System",
+    "rpaMetadata": {
+      "title": "Auto Generated",
+      "status": "Draft"
+    },
+    "createdAt": "2026-05-14T13:54:37.695Z",
+    "version": 1,
+    "history": [
       {
-        "version": 2,
-        "updatedAt": "2026-05-06T06:18:47.133Z",
-        "changes": "Status changed to reviewed"
-      },
+        "version": 1,
+        "updatedAt": "2026-05-14T13:54:37.695Z",
+        "changes": "Initial creation via RPA"
+      }
+    ]
+  },
+  {
+    "id": "4893bf58-6a84-4e85-ab98-da5c2ece245d",
+    "title": "New staff setup steps:\r\n✔ Create...",
+    "rawText": "New staff setup steps:\r\n✔ Create AD account\r\n✔ Give email access\r\n✔ SAP + CW1 role\r\n✔ Share SOP folder\r\nDelay usually because SAP request not approved",
+    "textHash": "4afd8d1972ceba26286ac023c0002bfab02340544ed0325b9fbb4bb4e8d4ca15",
+    "summary": "New staff setup steps:\r\n✔ Create AD account\r\n✔ Give email access\r\n✔ SAP + CW1 role\r\n✔ Share SOP folder\r\nDelay usually because SAP request not approved",
+    "status": "draft",
+    "creator": "System",
+    "rpaMetadata": {
+      "title": "Auto Generated",
+      "status": "Draft"
+    },
+    "createdAt": "2026-05-14T13:54:37.764Z",
+    "version": 1,
+    "history": [
       {
-        "version": 3,
-        "updatedAt": "2026-05-06T06:18:53.525Z",
-        "changes": "Article details updated"
-      },
+        "version": 1,
+        "updatedAt": "2026-05-14T13:54:37.764Z",
+        "changes": "Initial creation via RPA"
+      }
+    ]
+  },
+  {
+    "id": "08f45d31-b4ee-4d46-b6ce-a1f8045b6bb2",
+    "title": "POD upload failed again 😓\r\nError...",
+    "rawText": "POD upload failed again 😓\r\nError msg: “File size too large”\r\nJust compress the image before uploading.\r\nJPEG works better than PNG.\r\nAfter upload, refresh screen twice.",
+    "textHash": "74e8f9d4dccc834a6181c3a2afeac484b68857fe3eb59e8c67d608eaadf3f005",
+    "summary": "POD upload failed again 😓\r\nError msg: “File size too large”\r\nJust compress the image before uploading.\r\nJPEG works better than PNG.\r\nAfter upload, refresh screen twice.",
+    "status": "draft",
+    "creator": "System",
+    "rpaMetadata": {
+      "title": "Auto Generated",
+      "status": "Draft"
+    },
+    "createdAt": "2026-05-14T13:54:37.831Z",
+    "version": 1,
+    "history": [
       {
-        "version": 3,
-        "updatedAt": "2026-05-06T06:18:53.545Z",
-        "changes": "Status changed to published"
+        "version": 1,
+        "updatedAt": "2026-05-14T13:54:37.831Z",
+        "changes": "Initial creation via RPA"
+      }
+    ]
+  },
+  {
+    "id": "74b63d65-7124-4248-aa3a-2578f5392fd7",
+    "title": "hello world",
+    "rawText": "hello world",
+    "textHash": "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+    "summary": "hello world",
+    "status": "draft",
+    "creator": "System",
+    "rpaMetadata": {
+      "title": "test",
+      "status": "Draft"
+    },
+    "createdAt": "2026-05-14T13:54:46.789Z",
+    "version": 1,
+    "history": [
+      {
+        "version": 1,
+        "updatedAt": "2026-05-14T13:54:46.789Z",
+        "changes": "Initial creation via RPA"
+      }
+    ]
+  },
+  {
+    "id": "04229800-bca5-40ad-a1d5-2caa7f8444ee",
+    "title": "hiiii im weilam",
+    "rawText": "hiiii im weilam",
+    "textHash": "ad51d1de461ed443cbe431e456b1d28f92a2594a849198befacbb4d5e9e03bae",
+    "summary": "hiiii im weilam",
+    "status": "draft",
+    "creator": "admin",
+    "sourceFile": "hii.txt",
+    "createdAt": "2026-05-14T14:01:02.397Z",
+    "version": 1,
+    "history": [
+      {
+        "version": 1,
+        "updatedAt": "2026-05-14T14:01:02.397Z",
+        "changes": "Initial creation via upload"
       }
     ]
   }

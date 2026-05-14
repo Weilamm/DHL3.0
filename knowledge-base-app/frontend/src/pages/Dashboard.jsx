@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getArticles } from '../api';
-import { BookOpen, FileEdit, CheckCircle, Clock, ChevronRight } from 'lucide-react';
+import { BookOpen, FileEdit, CheckCircle, Clock, ChevronRight, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { deleteArticle } from '../api';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({ total: 0, draft: 0, reviewed: 0, published: 0 });
@@ -24,6 +25,17 @@ const Dashboard = () => {
       setRecent(articles.slice(-5).reverse());
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleDelete = async (id, title) => {
+    if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
+      try {
+        await deleteArticle(id);
+        fetchData();
+      } catch (err) {
+        console.error('Delete failed:', err);
+      }
     }
   };
 
@@ -103,12 +115,20 @@ const Dashboard = () => {
                   }`}>
                     {article.status}
                   </span>
-                  <Link 
+                   <Link 
                     to={`/editor/${article.id}`} 
                     className="p-2 rounded-lg bg-dark-700 text-gray-300 hover:text-white hover:bg-primary-600 transition-all shadow-sm"
+                    title="Edit Record"
                   >
                     <FileEdit size={16} />
                   </Link>
+                  <button 
+                    onClick={() => handleDelete(article.id, article.title)}
+                    className="p-2 rounded-lg bg-dark-700 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all shadow-sm"
+                    title="Delete Record"
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               </div>
             ))

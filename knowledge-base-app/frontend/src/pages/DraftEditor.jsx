@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getArticles, updateArticle, updateArticleStatus } from '../api';
+import { getArticles, updateArticle, updateArticleStatus, deleteArticle } from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Save, CheckCircle, Send, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { Save, CheckCircle, Send, ArrowLeft, Plus, Trash2, Clock, Paperclip, Terminal } from 'lucide-react';
 
 const DraftEditor = () => {
   const { id } = useParams();
@@ -14,8 +14,9 @@ const DraftEditor = () => {
   
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
+  const [tags, setTags] = useState([]);
+  const [newTag, setNewTag] = useState('');
   const [steps, setSteps] = useState([]);
-  const [tags, setTags] = useState('');
 
   useEffect(() => {
     fetchArticle();
@@ -29,8 +30,8 @@ const DraftEditor = () => {
         setArticle(found);
         setTitle(found.title);
         setSummary(found.summary);
-        setSteps(found.steps);
-        setTags(found.tags.join(', '));
+        setTags(found.tags || []);
+        setSteps(found.steps || []);
       }
       setLoading(false);
     } catch (err) {
@@ -42,8 +43,7 @@ const DraftEditor = () => {
   const handleSave = async (newStatus = null) => {
     setSaving(true);
     try {
-      const tagsArray = tags.split(',').map(t => t.trim()).filter(t => t);
-      const updateData = { title, summary, steps, tags: tagsArray };
+      const updateData = { title, summary, tags, steps };
       
       await updateArticle(id, updateData);
       
@@ -64,14 +64,17 @@ const DraftEditor = () => {
     }
   };
 
-  const handleStepChange = (index, value) => {
-    const newSteps = [...steps];
-    newSteps[index] = value;
-    setSteps(newSteps);
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to permanently delete this record?')) {
+      try {
+        await deleteArticle(id);
+        navigate('/knowledge-base');
+      } catch (err) {
+        console.error('Delete failed:', err);
+      }
+    }
   };
 
-  const addStep = () => setSteps([...steps, '']);
-  const removeStep = (index) => setSteps(steps.filter((_, i) => i !== index));
 
   if (loading) return <div className="text-center py-20 text-gray-400 animate-pulse">Establishing connection...</div>;
   if (!article) return <div className="text-center py-20 text-red-400">Record not found in the database.</div>;
@@ -99,13 +102,21 @@ const DraftEditor = () => {
         </div>
         
         <div className="flex gap-3">
-          <button
+            <button
             onClick={() => handleSave(article.status)}
             disabled={saving}
             className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
           >
             <Save size={16} className="mr-2 text-gray-400" />
             Save Draft
+          </button>
+          
+          <button
+            onClick={handleDelete}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-red-400 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 transition-colors"
+          >
+            <Trash2 size={16} className="mr-2" />
+            Delete Record
           </button>
           
           {(user.role === 'Admin' || user.role === 'Editor' || user.role === 'Reviewer') && article.status === 'draft' && (
@@ -149,7 +160,7 @@ const DraftEditor = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">Executive Summary</label>
+              <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">Extracted Message</label>
               <textarea
                 rows="4"
                 className="w-full px-4 py-3 glass-input rounded-xl shadow-inner leading-relaxed"
@@ -159,56 +170,115 @@ const DraftEditor = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wider">Procedural Steps</label>
+              <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider flex justify-between">
+                <span>Procedural Steps</span>
+                <button 
+                  onClick={() => setSteps([...steps, ''])}
+                  className="text-primary-400 hover:text-primary-300 flex items-center text-[10px]"
+                >
+                  <Plus size={12} className="mr-1" /> Add Step
+                </button>
+              </label>
               <div className="space-y-3">
                 {steps.map((step, index) => (
-                  <div key={index} className="flex gap-3 group">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-dark-700 border border-white/5 text-primary-400 flex items-center justify-center font-bold text-xs shadow-sm mt-1">
+                  <div key={index} className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500/10 text-primary-400 text-[10px] flex items-center justify-center font-bold border border-primary-500/20">
                       {index + 1}
-                    </div>
-                    <textarea
-                      rows="2"
-                      className="flex-1 px-4 py-2 glass-input rounded-xl text-sm"
+                    </span>
+                    <input
+                      className="flex-1 glass-input px-3 py-1.5 rounded-lg text-sm"
                       value={step}
-                      onChange={(e) => handleStepChange(index, e.target.value)}
-                    ></textarea>
-                    <button
-                      onClick={() => removeStep(index)}
-                      className="p-2 mt-1 text-red-500/50 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition self-start opacity-0 group-hover:opacity-100"
+                      onChange={(e) => {
+                        const newSteps = [...steps];
+                        newSteps[index] = e.target.value;
+                        setSteps(newSteps);
+                      }}
+                    />
+                    <button 
+                      onClick={() => setSteps(steps.filter((_, i) => i !== index))}
+                      className="text-gray-500 hover:text-red-400"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 ))}
               </div>
-              <button
-                onClick={addStep}
-                className="mt-4 inline-flex items-center text-xs font-bold text-primary-400 hover:text-primary-300 px-3 py-1.5 rounded-lg bg-primary-500/10 hover:bg-primary-500/20 transition-colors uppercase tracking-wider"
-              >
-                <Plus size={14} className="mr-1" /> Add Step
-              </button>
             </div>
           </div>
         </div>
 
         <div className="space-y-6">
-          <div className="glass-panel rounded-2xl p-6">
-            <label className="block text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wider">Metadata Tags</label>
-            <input
-              type="text"
-              className="w-full px-4 py-2 glass-input rounded-xl text-sm"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder="e.g., Security, Setup"
-            />
-            <div className="mt-4 flex flex-wrap gap-2">
-              {tags.split(',').map((t, i) => t.trim() && (
-                <span key={i} className="px-2.5 py-1 text-xs font-medium bg-dark-700 border border-white/10 text-gray-300 rounded-md">
-                  {t.trim()}
+          <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">
+            <h3 className="text-xs font-semibold text-gray-400 mb-4 uppercase tracking-wider flex items-center">
+              <Tag size={14} className="mr-2 text-orange-400" /> Categorization Tags
+            </h3>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {tags.map(tag => (
+                <span key={tag} className="px-2 py-1 bg-primary-500/10 text-primary-400 border border-primary-500/20 rounded-md text-[10px] font-bold flex items-center">
+                  {tag}
+                  <button onClick={() => setTags(tags.filter(t => t !== tag))} className="ml-1.5 hover:text-red-400">
+                    ×
+                  </button>
                 </span>
               ))}
             </div>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                className="flex-1 glass-input px-3 py-1.5 rounded-lg text-xs" 
+                placeholder="New tag..."
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newTag) {
+                    setTags([...new Set([...tags, newTag])]);
+                    setNewTag('');
+                  }
+                }}
+              />
+              <button 
+                onClick={() => {
+                  if (newTag) {
+                    setTags([...new Set([...tags, newTag])]);
+                    setNewTag('');
+                  }
+                }}
+                className="p-1.5 bg-primary-600 rounded-lg text-white"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
           </div>
+          {article.sourceFile && (
+            <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">
+              <h3 className="text-xs font-semibold text-gray-400 mb-4 uppercase tracking-wider flex items-center">
+                <Paperclip size={14} className="mr-2" /> Source Attachment
+              </h3>
+              <div className="flex items-center p-3 bg-dark-800/50 border border-white/5 rounded-lg">
+                <span className="text-sm text-primary-400 font-medium truncate">{article.sourceFile}</span>
+              </div>
+            </div>
+          )}
+
+          {article.rpaMetadata && (
+            <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">
+              <h3 className="text-xs font-semibold text-gray-400 mb-4 uppercase tracking-wider flex items-center">
+                <Terminal size={14} className="mr-2 text-primary-400" /> RPA Metadata
+              </h3>
+              <div className="space-y-3">
+                {Object.entries(article.rpaMetadata).map(([key, value]) => (
+                  <div className="flex flex-col" key={key}>
+                    <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </span>
+                    <span className="text-sm font-medium text-gray-300 break-all">
+                      {String(value)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">
             <h3 className="text-xs font-semibold text-gray-400 mb-4 uppercase tracking-wider flex items-center">

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { createArticle } from '../api';
-import { UploadCloud, FileText, Loader2, Sparkles } from 'lucide-react';
+import { uploadFile } from '../api';
+import { UploadCloud, FileText, Loader2, Sparkles, X } from 'lucide-react';
 
 const Upload = () => {
   const [rawText, setRawText] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
@@ -13,13 +14,13 @@ const Upload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!rawText.trim()) return;
+    if (!rawText.trim() && !selectedFile) return;
 
     setLoading(true);
     setError('');
 
     try {
-      const response = await createArticle(rawText, user.username);
+      const response = await uploadFile(selectedFile, rawText, user?.username || 'System');
       navigate(`/editor/${response.data.id}`);
     } catch (err) {
       if (err.response && err.response.status === 409) {
@@ -34,7 +35,8 @@ const Upload = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setRawText(`[Extracted payload from ${file.name}]\n\nSystem initialization protocol engaged. Verify operational integrity before proceeding.`);
+      setSelectedFile(file);
+      setError('');
     }
   };
 
@@ -67,7 +69,7 @@ const Upload = () => {
                 placeholder="Paste raw data block here..."
                 value={rawText}
                 onChange={(e) => setRawText(e.target.value)}
-                disabled={loading}
+                disabled={loading || selectedFile}
               ></textarea>
             </div>
           </div>
@@ -82,23 +84,40 @@ const Upload = () => {
           </div>
 
           <div>
-            <label className="flex justify-center w-full h-32 px-4 transition bg-dark-900/50 border-2 border-primary-500/30 border-dashed rounded-xl appearance-none cursor-pointer hover:border-primary-400/60 hover:bg-primary-900/10 focus:outline-none group">
-                <span className="flex items-center space-x-3">
-                    <UploadCloud className="w-8 h-8 text-primary-500 group-hover:text-primary-400 transition-colors" />
-                    <span className="font-medium text-gray-400 group-hover:text-gray-300 transition-colors">
-                        Drop payload (PDF, DOCX) or <span className="text-secondary-400 border-b border-secondary-400/30 pb-0.5">browse</span>
-                    </span>
-                </span>
-                <input type="file" className="hidden" accept=".pdf,.docx,.txt" onChange={handleFileChange} disabled={loading} />
-            </label>
+            {!selectedFile ? (
+              <label className="flex justify-center w-full h-32 px-4 transition bg-dark-900/50 border-2 border-primary-500/30 border-dashed rounded-xl appearance-none cursor-pointer hover:border-primary-400/60 hover:bg-primary-900/10 focus:outline-none group">
+                  <span className="flex items-center space-x-3">
+                      <UploadCloud className="w-8 h-8 text-primary-500 group-hover:text-primary-400 transition-colors" />
+                      <span className="font-medium text-gray-400 group-hover:text-gray-300 transition-colors">
+                          Drop payload (PDF, DOCX, PNG/JPG) or <span className="text-secondary-400 border-b border-secondary-400/30 pb-0.5">browse</span>
+                      </span>
+                  </span>
+                  <input type="file" className="hidden" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg" onChange={handleFileChange} disabled={loading || rawText.trim()} />
+              </label>
+            ) : (
+              <div className="flex items-center justify-between p-4 bg-primary-900/20 border border-primary-500/30 rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <FileText className="text-primary-400 w-6 h-6" />
+                  <span className="text-gray-200 text-sm truncate max-w-xs">{selectedFile.name}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedFile(null)}
+                  className="text-gray-400 hover:text-red-400 transition"
+                  disabled={loading}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end pt-6 border-t border-white/5 mt-8">
             <button
               type="submit"
-              disabled={loading || !rawText.trim()}
+              disabled={loading || (!rawText.trim() && !selectedFile)}
               className={`inline-flex items-center px-8 py-3 text-sm font-bold rounded-xl transition-all ${
-                loading || !rawText.trim() 
+                loading || (!rawText.trim() && !selectedFile)
                   ? 'bg-dark-700 text-gray-500 cursor-not-allowed border border-white/5' 
                   : 'neon-button border border-white/10'
               }`}
