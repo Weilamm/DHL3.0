@@ -24,6 +24,25 @@ The application follows a **RESTful Client-Server** architecture optimized for R
 
 ---
 
+## 👥 User Roles (RBAC)
+The system enforces Role-Based Access Control to manage operations securely:
+
+### 👑 Admin
+- Manages the knowledge base system.
+- Reviews and approves draft articles.
+- Edits or deletes incorrect articles and manages tags/categories.
+- Monitors RPA automation logs.
+- Can ingest new documents or manual uploads.
+- **Demo Credentials**: `admin` / `admin`
+
+### 👁 Viewer
+- End-user role to access and read published operational knowledge.
+- Read-only access: Cannot edit, delete, ingest, or approve articles.
+- Can search and filter articles by tag, creator, and date (limited to Published status).
+- **Demo Credentials**: `viewer` / `viewer`
+
+---
+
 ## 📡 API Reference
 
 ### Article Management
