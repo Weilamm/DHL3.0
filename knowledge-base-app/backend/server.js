@@ -65,10 +65,8 @@ app.post('/api/login', (req, res) => {
     // Mock login logic
     if (username === 'admin' && password === 'admin') {
         return res.json({ token: 'mock-jwt-admin', role: 'Admin', username });
-    } else if (username === 'editor' && password === 'editor') {
-        return res.json({ token: 'mock-jwt-editor', role: 'Editor', username });
-    } else if (username === 'reviewer' && password === 'reviewer') {
-        return res.json({ token: 'mock-jwt-reviewer', role: 'Reviewer', username });
+    } else if (username === 'viewer' && password === 'viewer') {
+        return res.json({ token: 'mock-jwt-viewer', role: 'Viewer', username });
     }
     
     return res.status(401).json({ error: 'Invalid credentials' });

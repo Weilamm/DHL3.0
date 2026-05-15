@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getArticles, updateArticle, updateArticleStatus, deleteArticle } from '../api';
 import { useAuth } from '../context/AuthContext';
-import { Save, CheckCircle, Send, ArrowLeft, Plus, Trash2, Clock, Paperclip, Terminal } from 'lucide-react';
+import { Save, CheckCircle, Send, ArrowLeft, Plus, Trash2, Clock, Paperclip, Terminal, Tag } from 'lucide-react';
 
 const DraftEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isViewer = user?.role === 'Viewer';
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -102,6 +103,7 @@ const DraftEditor = () => {
         </div>
         
         <div className="flex gap-3">
+            {!isViewer && (
             <button
             onClick={() => handleSave(article.status)}
             disabled={saving}
@@ -110,7 +112,9 @@ const DraftEditor = () => {
             <Save size={16} className="mr-2 text-gray-400" />
             Save Draft
           </button>
+          )}
           
+          {!isViewer && (
           <button
             onClick={handleDelete}
             className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-red-400 bg-red-500/5 hover:bg-red-500/10 border border-red-500/20 transition-colors"
@@ -118,8 +122,9 @@ const DraftEditor = () => {
             <Trash2 size={16} className="mr-2" />
             Delete Record
           </button>
+          )}
           
-          {(user.role === 'Admin' || user.role === 'Editor' || user.role === 'Reviewer') && article.status === 'draft' && (
+          {user.role === 'Admin' && article.status === 'draft' && (
             <button
               onClick={() => handleSave('reviewed')}
               disabled={saving}
@@ -130,7 +135,7 @@ const DraftEditor = () => {
             </button>
           )}
 
-          {(user.role === 'Admin' || user.role === 'Editor') && article.status !== 'published' && (
+          {user.role === 'Admin' && article.status !== 'published' && (
             <button
               onClick={() => handleSave('published')}
               disabled={saving}
@@ -153,9 +158,10 @@ const DraftEditor = () => {
               <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">Designation / Title</label>
               <input
                 type="text"
-                className="w-full px-4 py-3 glass-input rounded-xl text-lg font-medium shadow-inner"
+                className={`w-full px-4 py-3 glass-input rounded-xl text-lg font-medium shadow-inner ${isViewer ? 'opacity-70' : ''}`}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                readOnly={isViewer}
               />
             </div>
 
@@ -163,21 +169,24 @@ const DraftEditor = () => {
               <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">Extracted Message</label>
               <textarea
                 rows="4"
-                className="w-full px-4 py-3 glass-input rounded-xl shadow-inner leading-relaxed"
+                className={`w-full px-4 py-3 glass-input rounded-xl shadow-inner leading-relaxed ${isViewer ? 'opacity-70' : ''}`}
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
+                readOnly={isViewer}
               ></textarea>
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider flex justify-between">
                 <span>Procedural Steps</span>
+                {!isViewer && (
                 <button 
                   onClick={() => setSteps([...steps, ''])}
                   className="text-primary-400 hover:text-primary-300 flex items-center text-[10px]"
                 >
                   <Plus size={12} className="mr-1" /> Add Step
                 </button>
+                )}
               </label>
               <div className="space-y-3">
                 {steps.map((step, index) => (
@@ -186,20 +195,23 @@ const DraftEditor = () => {
                       {index + 1}
                     </span>
                     <input
-                      className="flex-1 glass-input px-3 py-1.5 rounded-lg text-sm"
+                      className={`flex-1 glass-input px-3 py-1.5 rounded-lg text-sm ${isViewer ? 'opacity-70' : ''}`}
                       value={step}
                       onChange={(e) => {
                         const newSteps = [...steps];
                         newSteps[index] = e.target.value;
                         setSteps(newSteps);
                       }}
+                      readOnly={isViewer}
                     />
+                    {!isViewer && (
                     <button 
                       onClick={() => setSteps(steps.filter((_, i) => i !== index))}
                       className="text-gray-500 hover:text-red-400"
                     >
                       <Trash2 size={14} />
                     </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -216,12 +228,15 @@ const DraftEditor = () => {
               {tags.map(tag => (
                 <span key={tag} className="px-2 py-1 bg-primary-500/10 text-primary-400 border border-primary-500/20 rounded-md text-[10px] font-bold flex items-center">
                   {tag}
+                  {!isViewer && (
                   <button onClick={() => setTags(tags.filter(t => t !== tag))} className="ml-1.5 hover:text-red-400">
                     ×
                   </button>
+                  )}
                 </span>
               ))}
             </div>
+            {!isViewer && (
             <div className="flex gap-2">
               <input 
                 type="text" 
@@ -248,6 +263,7 @@ const DraftEditor = () => {
                 <Plus size={14} />
               </button>
             </div>
+            )}
           </div>
           {article.sourceFile && (
             <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">

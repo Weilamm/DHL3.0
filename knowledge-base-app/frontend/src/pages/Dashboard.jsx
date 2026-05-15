@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getArticles } from '../api';
-import { BookOpen, FileEdit, CheckCircle, Clock, ChevronRight, Trash2 } from 'lucide-react';
+import { BookOpen, FileEdit, CheckCircle, Clock, ChevronRight, Trash2, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { deleteArticle } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState({ total: 0, draft: 0, reviewed: 0, published: 0 });
   const [recent, setRecent] = useState([]);
 
@@ -118,10 +120,11 @@ const Dashboard = () => {
                    <Link 
                     to={`/editor/${article.id}`} 
                     className="p-2 rounded-lg bg-dark-700 text-gray-300 hover:text-white hover:bg-primary-600 transition-all shadow-sm"
-                    title="Edit Record"
+                    title={user?.role === 'Viewer' ? "View Record" : "Edit Record"}
                   >
-                    <FileEdit size={16} />
+                    {user?.role === 'Viewer' ? <Eye size={16} /> : <FileEdit size={16} />}
                   </Link>
+                  {user?.role !== 'Viewer' && (
                   <button 
                     onClick={() => handleDelete(article.id, article.title)}
                     className="p-2 rounded-lg bg-dark-700 text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all shadow-sm"
@@ -129,6 +132,7 @@ const Dashboard = () => {
                   >
                     <Trash2 size={16} />
                   </button>
+                  )}
                 </div>
               </div>
             ))

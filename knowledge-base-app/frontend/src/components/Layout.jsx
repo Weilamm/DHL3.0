@@ -15,7 +15,7 @@ const Layout = () => {
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={18} /> },
-    { name: 'Upload', path: '/upload', icon: <UploadCloud size={18} /> },
+    ...(user?.role !== 'Viewer' ? [{ name: 'Upload', path: '/upload', icon: <UploadCloud size={18} /> }] : []),
     { name: 'Knowledge Base', path: '/knowledge-base', icon: <BookOpen size={18} /> },
   ];
 

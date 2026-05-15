@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { getArticles } from '../api';
-import { Search, Filter, Database, ChevronRight, User, Calendar, Trash2, Tag } from 'lucide-react';
+import { Search, Filter, Database, ChevronRight, User, Calendar, Trash2, Tag, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { deleteArticle } from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const KnowledgeBase = () => {
+  const { user } = useAuth();
+  const isViewer = user?.role === 'Viewer';
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(isViewer ? 'published' : 'all');
   const [creatorFilter, setCreatorFilter] = useState('all');
   const [tagFilter, setTagFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('');
@@ -84,18 +87,22 @@ const KnowledgeBase = () => {
           <p className="text-gray-400 mt-2 text-sm">Query and manage processed structural data.</p>
         </div>
         <div className="flex gap-3">
-          <button 
-            onClick={handleClearAll}
-            className="px-6 py-2.5 rounded-xl text-sm font-bold flex items-center border border-red-500/30 text-red-400 hover:bg-red-500/10 transition"
-          >
-            Clear Archive
-          </button>
-          <Link 
-            to="/upload"
-            className="neon-button px-6 py-2.5 rounded-xl text-sm font-bold flex items-center"
-          >
-            <span className="text-lg mr-2 leading-none">+</span> New Ingestion
-          </Link>
+          {!isViewer && (
+            <button 
+              onClick={handleClearAll}
+              className="px-6 py-2.5 rounded-xl text-sm font-bold flex items-center border border-red-500/30 text-red-400 hover:bg-red-500/10 transition"
+            >
+              Clear Archive
+            </button>
+          )}
+          {!isViewer && (
+            <Link 
+              to="/upload"
+              className="neon-button px-6 py-2.5 rounded-xl text-sm font-bold flex items-center"
+            >
+              <span className="text-lg mr-2 leading-none">+</span> New Ingestion
+            </Link>
+          )}
         </div>
       </div>
 
@@ -122,6 +129,7 @@ const KnowledgeBase = () => {
                 className="pl-11 pr-8 py-2.5 glass-input rounded-xl text-sm appearance-none w-full cursor-pointer text-gray-200"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
+                disabled={isViewer}
               >
                 <option value="all" className="bg-dark-900">All Status</option>
                 <option value="draft" className="bg-dark-900">Draft Status</option>
@@ -228,8 +236,9 @@ const KnowledgeBase = () => {
                           to={`/editor/${article.id}`}
                           className="inline-flex items-center text-primary-400 hover:text-primary-300 font-bold text-xs uppercase tracking-wider px-3 py-2 rounded-lg hover:bg-primary-500/10 transition"
                         >
-                          Access <ChevronRight size={14} className="ml-1" />
+                          {isViewer ? 'View' : 'Access'} <ChevronRight size={14} className="ml-1" />
                         </Link>
+                        {!isViewer && (
                         <button 
                           onClick={() => handleDelete(article.id, article.title)}
                           className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition"
@@ -237,6 +246,7 @@ const KnowledgeBase = () => {
                         >
                           <Trash2 size={16} />
                         </button>
+                        )}
                       </td>
                     </tr>
                   ))

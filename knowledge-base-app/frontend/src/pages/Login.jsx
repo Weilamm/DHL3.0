@@ -18,7 +18,7 @@ const Login = () => {
       login(response.data);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid credentials. Try admin/admin.');
+      setError('Invalid credentials. Try admin/admin or viewer/viewer.');
     }
   };
 
@@ -88,12 +88,12 @@ const Login = () => {
               type="submit"
               className="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white neon-button"
             >
-              INITIALIZE SESSION
+              Login
             </button>
           </div>
           
           <div className="text-xs text-center text-gray-500 mt-4 tracking-widest uppercase">
-            System Demo: admin / admin
+            System Demo: admin / admin OR viewer / viewer
           </div>
         </form>
       </div>
